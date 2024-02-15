@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:my_finance_app/repository/bills_repository.dart';
 import 'package:my_finance_app/screens/finance/bloc/finance_bloc.dart';
 import 'package:my_finance_app/theme/colors.dart';
 
@@ -19,7 +18,7 @@ class _SpendTabState extends State<SpendTab> {
       backgroundColor: AppColors.black,
       body: BlocProvider(
         create: (context) =>
-        FinanceBloc(GetIt.I<BillsRepository>())..add(GetSpendBillsEvent()),
+        FinanceBloc()..add(GetSpendBillsEvent()),
         child: BlocBuilder<FinanceBloc, FinanceState>(
           builder: (context, state) {
             if (state is LoadedSpendBillsState) {

@@ -5,6 +5,10 @@ const String _kuserEmailKey = 'userEmail';
 const String _kincomeKey = 'income';
 const String _kspendKey = 'spend';
 
+const String _kspendBillsKey = 'spendBills';
+const String _kincomeBillsKey = 'incomeBills';
+
+
 class SharedPreferencesService {
   static SharedPreferencesService? _instance;
   static late SharedPreferences _preferences;
@@ -40,8 +44,6 @@ class SharedPreferencesService {
       _preferences.setBool(key, value);
     } else if (value is List<String>) {
       _preferences.setStringList(key, value);
-    } else if (value is List<String>) {
-      _preferences.setStringList(key, value);
     }
   }
 
@@ -56,4 +58,28 @@ class SharedPreferencesService {
 
   double get spend => _getData(_kspendKey) ?? 0;
   set spend(double value) => _saveData(_kspendKey, value);
+
+  List<String> get spendBills {
+    List<String> spendBillsList = _getData(_kspendBillsKey)?.cast<String>().toList() ?? [];
+    return spendBillsList;
+  }
+
+  set spendBills(List<String> value) {
+    List<String> spendBillsList = _getData(_kspendBillsKey)?.cast<String>().toList() ?? [];
+    spendBillsList = [];
+    spendBillsList.addAll(value);
+    _saveData(_kspendBillsKey, spendBillsList);
+  }
+
+  List<String> get incomeBills {
+    List<String> incomeBillsList = _getData(_kincomeBillsKey)?.cast<String>().toList() ?? [];
+    return incomeBillsList;
+  }
+
+  set incomeBills(List<String> value) {
+    List<String> incomeBillsList = _getData(_kincomeBillsKey)?.cast<String>().toList() ?? [];
+    incomeBillsList = [];
+    incomeBillsList.addAll(value);
+    _saveData(_kincomeBillsKey, incomeBillsList);
+  }
 }

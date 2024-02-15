@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:my_finance_app/models/bill_model.dart';
-import 'package:my_finance_app/repository/bills_repository.dart';
 import 'package:my_finance_app/services/shared_preferences.dart';
 
 part 'finance_event.dart';
@@ -11,9 +10,8 @@ part 'finance_event.dart';
 part 'finance_state.dart';
 
 class FinanceBloc extends Bloc<FinanceEvent, FinanceState> {
-  final BillsRepository _billsRepository;
 
-  FinanceBloc(this._billsRepository) : super(FinanceInitial()) {
+  FinanceBloc() : super(FinanceInitial()) {
     on<GetIncomeBillsEvent>(_getIncomeBillsHandler);
     on<GetSpendBillsEvent>(_getSpendBillsHandler);
     on<AddIncomeBillEvent>(_addIncomeBillHandler);
@@ -22,14 +20,20 @@ class FinanceBloc extends Bloc<FinanceEvent, FinanceState> {
   }
 
   void _getIncomeBillsHandler(
-      GetIncomeBillsEvent event, Emitter<FinanceState> emit) {
-    final _incomeBills = _billsRepository.getIncomeBills;
+      GetIncomeBillsEvent event, Emitter<FinanceState> emit) async {
+    SharedPreferencesService storage =
+        await SharedPreferencesService.getInstance();
+
+    final List<BillModel> _incomeBills = convertStringListToBillModelList(storage.incomeBills);
     emit(LoadedIncomeBillsState(incomeBills: _incomeBills));
   }
 
   void _getSpendBillsHandler(
-      GetSpendBillsEvent event, Emitter<FinanceState> emit) {
-    final _spendBills = _billsRepository.getSpendBills;
+      GetSpendBillsEvent event, Emitter<FinanceState> emit) async {
+    SharedPreferencesService storage =
+    await SharedPreferencesService.getInstance();
+
+    final List<BillModel> _spendBills = convertStringListToBillModelList(storage.spendBills);
     emit(LoadedSpendBillsState(spendBills: _spendBills));
   }
 
@@ -37,22 +41,33 @@ class FinanceBloc extends Bloc<FinanceEvent, FinanceState> {
       AddIncomeBillEvent event, Emitter<FinanceState> emit) async {
     SharedPreferencesService storage =
         await SharedPreferencesService.getInstance();
+    final String incomeBillString =
+        "Value: ${event.incomeBill.value}, Comment: ${event.incomeBill.comment}, Date: ${event.incomeBill.date}";
+
+    final List<String> _incomeBills = storage.incomeBills;
+    _incomeBills.add(incomeBillString);
+    storage.incomeBills = _incomeBills;
+
     storage.income += event.incomeBill.value;
 
-    _billsRepository.addNewIncomeBill(event.incomeBill);
-    final _incomeBills = _billsRepository.getIncomeBills;
-    emit(LoadedIncomeBillsState(incomeBills: _incomeBills));
+    emit(LoadedIncomeBillsState(incomeBills: convertStringListToBillModelList(storage.incomeBills)));
   }
 
   void _addSpendBillHandler(
       AddSpendBillEvent event, Emitter<FinanceState> emit) async {
     SharedPreferencesService storage =
         await SharedPreferencesService.getInstance();
+
+    final String spendBillString =
+        "Value: ${event.spendBill.value}, Comment: ${event.spendBill.comment}, Date: ${event.spendBill.date}";
+
+    final List<String> _spendBills = storage.spendBills;
+    _spendBills.add(spendBillString);
+    storage.spendBills = _spendBills;
+
     storage.spend += event.spendBill.value;
 
-    _billsRepository.addNewSpendBill(event.spendBill);
-    final _spendBills = _billsRepository.getSpendBills;
-    emit(LoadedSpendBillsState(spendBills: _spendBills));
+    emit(LoadedSpendBillsState(spendBills: convertStringListToBillModelList(storage.spendBills)));
   }
 
   void _getSumsHandler(GetSumsEvent event, Emitter<FinanceState> emit) async {
@@ -60,5 +75,21 @@ class FinanceBloc extends Bloc<FinanceEvent, FinanceState> {
         await SharedPreferencesService.getInstance();
 
     emit(LoadedSumsState(incomeSum: storage.income, spendSum: storage.spend));
+  }
+
+  List<BillModel> convertStringListToBillModelList(List<String> stringList) {
+    List<BillModel> billModels = [];
+    for (String billString in stringList) {
+      List<String> parts = billString.split(', ');
+
+      double value = double.parse(parts[0].split(': ')[1]);
+      String comment = parts[1].split(': ')[1];
+      DateTime date = DateTime.parse(parts[2].split(': ')[1]);
+
+      BillModel billModel =
+      BillModel(value: value, comment: comment, date: date);
+      billModels.add(billModel);
+    }
+    return billModels;
   }
 }
