@@ -1,8 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:my_finance_app/screens/finance/finance_screen.dart';
 import 'package:my_finance_app/screens/home/home_screen.dart';
 import 'package:my_finance_app/screens/mortgage_calculator/mortgage_calculator_screen.dart';
+import 'package:my_finance_app/screens/news/news_list_screen.dart';
 import 'package:my_finance_app/theme/colors.dart';
 
 @RoutePage()
@@ -15,7 +17,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
-  final _tabs = [HomeScreen(), HomeScreen(), MortgageCalculatorScreen(),];
+  final _tabs = [HomeScreen(), NewListScreen(), MortgageCalculatorScreen(), FinanceScreen()];
 
   @override
   Widget build(BuildContext context) {

@@ -2,6 +2,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 const String _kuserNameKey = 'userName';
 const String _kuserEmailKey = 'userEmail';
+const String _kincomeKey = 'income';
+const String _kspendKey = 'spend';
 
 class SharedPreferencesService {
   static SharedPreferencesService? _instance;
@@ -38,6 +40,8 @@ class SharedPreferencesService {
       _preferences.setBool(key, value);
     } else if (value is List<String>) {
       _preferences.setStringList(key, value);
+    } else if (value is List<String>) {
+      _preferences.setStringList(key, value);
     }
   }
 
@@ -47,4 +51,9 @@ class SharedPreferencesService {
   String get userEmail => _getData(_kuserEmailKey) ?? 'user@user.com';
   set userEmail(String value) => _saveData(_kuserEmailKey, value);
 
+  double get income => _getData(_kincomeKey) ?? 0;
+  set income(double value) => _saveData(_kincomeKey, value);
+
+  double get spend => _getData(_kspendKey) ?? 0;
+  set spend(double value) => _saveData(_kspendKey, value);
 }

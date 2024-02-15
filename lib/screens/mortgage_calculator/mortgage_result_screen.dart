@@ -41,7 +41,6 @@ class _MortgageResultScreenState extends State<MortgageResultScreen> {
             color: AppColors.purple,
           ),
         ),
-        centerTitle: true,
         title: Text(
           'Zurück',
           style: TextStyle(

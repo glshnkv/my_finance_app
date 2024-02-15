@@ -15,6 +15,12 @@ abstract class _$AppRouter extends RootStackRouter {
 
   @override
   final Map<String, PageFactory> pagesMap = {
+    AddBillRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const AddBillScreen(),
+      );
+    },
     EditProfileRoute.name: (routeData) {
       final args = routeData.argsAs<EditProfileRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -24,6 +30,12 @@ abstract class _$AppRouter extends RootStackRouter {
           userName: args.userName,
           userEmail: args.userEmail,
         ),
+      );
+    },
+    FinanceRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const FinanceScreen(),
       );
     },
     HomeRoute.name: (routeData) {
@@ -57,6 +69,22 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    NewListRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const NewListScreen(),
+      );
+    },
+    NewsInfoRoute.name: (routeData) {
+      final args = routeData.argsAs<NewsInfoRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: NewsInfoScreen(
+          key: args.key,
+          news: args.news,
+        ),
+      );
+    },
     OnboardingRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -70,6 +98,20 @@ abstract class _$AppRouter extends RootStackRouter {
       );
     },
   };
+}
+
+/// generated route for
+/// [AddBillScreen]
+class AddBillRoute extends PageRouteInfo<void> {
+  const AddBillRoute({List<PageRouteInfo>? children})
+      : super(
+          AddBillRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'AddBillRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for
@@ -113,6 +155,20 @@ class EditProfileRouteArgs {
   String toString() {
     return 'EditProfileRouteArgs{key: $key, userName: $userName, userEmail: $userEmail}';
   }
+}
+
+/// generated route for
+/// [FinanceScreen]
+class FinanceRoute extends PageRouteInfo<void> {
+  const FinanceRoute({List<PageRouteInfo>? children})
+      : super(
+          FinanceRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'FinanceRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for
@@ -207,6 +263,58 @@ class MortgageResultRouteArgs {
   @override
   String toString() {
     return 'MortgageResultRouteArgs{key: $key, propertyValue: $propertyValue, initialFee: $initialFee, term: $term, rate: $rate}';
+  }
+}
+
+/// generated route for
+/// [NewListScreen]
+class NewListRoute extends PageRouteInfo<void> {
+  const NewListRoute({List<PageRouteInfo>? children})
+      : super(
+          NewListRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'NewListRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [NewsInfoScreen]
+class NewsInfoRoute extends PageRouteInfo<NewsInfoRouteArgs> {
+  NewsInfoRoute({
+    Key? key,
+    required NewsModel news,
+    List<PageRouteInfo>? children,
+  }) : super(
+          NewsInfoRoute.name,
+          args: NewsInfoRouteArgs(
+            key: key,
+            news: news,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'NewsInfoRoute';
+
+  static const PageInfo<NewsInfoRouteArgs> page =
+      PageInfo<NewsInfoRouteArgs>(name);
+}
+
+class NewsInfoRouteArgs {
+  const NewsInfoRouteArgs({
+    this.key,
+    required this.news,
+  });
+
+  final Key? key;
+
+  final NewsModel news;
+
+  @override
+  String toString() {
+    return 'NewsInfoRouteArgs{key: $key, news: $news}';
   }
 }
 
